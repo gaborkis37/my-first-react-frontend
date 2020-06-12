@@ -1,5 +1,7 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import { signout, isAuthenticated } from '../auth';
 
 const isActive = (history, path) => {
     if(history.location.pathname === path) {
@@ -8,33 +10,6 @@ const isActive = (history, path) => {
         return {color: "#ffffff"}
     }
 };
-
-export const signout = (next) => {
-    if(typeof window !== "undefined") {
-        localStorage.removeItem("jwt");
-    }
-    next();
-    return fetch("http://localhost:8080/signout", {
-        method: "GET"
-    })
-    .then(res => {
-        console.log('signout', res)
-        return res.json()
-    })
-    .catch(err => console.log(err));
-}
-
-export const isAuthenticated = () => {
-    if(typeof window === 'undefined') {
-        return false;
-    }
-
-    if(localStorage.getItem("jwt")) {
-        return JSON.parse(localStorage.getItem("jwt"));
-    } else {
-        return false; 
-    }
-}
 
 const Menu = ({ history }) => (
     <div>
@@ -54,9 +29,16 @@ const Menu = ({ history }) => (
             )}
             
            {isAuthenticated() && (
-                <li className="nav-item">
-                    <a className="nav-link" style={isActive(history, "/signup"), {cursor: "pointer", color: "#ffffff"}} onClick={() => signout(() => history.push('/'))}>Sign out</a>
-                </li>
+               <>
+                    <li className="nav-item">
+                        <a  className="nav-link" style={isActive(history, "/signup"), {cursor: "pointer", color: "#ffffff"}} onClick={() => signout(() => history.push('/'))}>Sign out</a>
+                    </li>
+                    <li className="nav-item">
+                        <a className="nav-link">
+                            {`${isAuthenticated().user.name}'s profile`}
+                        </a>
+                    </li>
+                </>
            )}
         </ul>
     </div>

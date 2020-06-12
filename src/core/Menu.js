@@ -1,3 +1,4 @@
+/* eslint-disable no-sequences */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
@@ -34,9 +35,9 @@ const Menu = ({ history }) => (
                         <a  className="nav-link" style={isActive(history, "/signup"), {cursor: "pointer", color: "#ffffff"}} onClick={() => signout(() => history.push('/'))}>Sign out</a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link">
+                        <Link to={`/user/${isAuthenticated().user._id}`} style={isActive(history, `/user/${isAuthenticated().user._id}`)} className="nav-link">
                             {`${isAuthenticated().user.name}'s profile`}
-                        </a>
+                        </Link>
                     </li>
                 </>
            )}
